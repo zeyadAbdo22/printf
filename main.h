@@ -1,32 +1,29 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <unistd.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 /**
- * struct conv_spec - Strct conv_spec
- * @conv_spec: The conversion specifier
- * @f: The function associated
- */
-typedef struct conv_spec
+* struct cnvert - structure  functions with symbols
+*
+* @op: opereration
+* @funct: function assessment
+*/
+struct cnvert
 {
-	char *conv_spec;
-	int (*f)(char c, const char *s, long int n, unsigned long int m);
-} conv_spec_t;
+	char *op;
+	int (*funct)(va_list);
+};
+typedef struct cnvert cnvert_t;
 
-int _putchar(char c);
-int _puts(const char *s);
+int pars(const char *form, cnvert_t f_lst[], va_list arg_lst);
 int _printf(const char *format, ...);
+int _putchar(char c);
+int _print_char(va_list);
+int _print_strng(va_list);
+int _print_percent(va_list);
 
-int _print_char(char c, const char *s, long int n, unsigned long int m);
-int _print_string(char c, const char *s, long int n, unsigned long int m);
-int _print_int(char c, const char *s, long int n, unsigned long int m);
-int (*get_f(const char *s))(char, const char *, long int, unsigned long int);
-
-void print_binary(unsigned long int n);
-void print_integer(unsigned long int n);
-void print_unsigned_integer(unsigned long int n);
-int number_digits_binary(long int n);
-int number_digits(long int n);
 
 #endif
