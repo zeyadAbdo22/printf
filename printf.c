@@ -40,12 +40,12 @@ int print_string(va_list args)
 }
 
 /**
- * _print_number - print an integer number
+ * print_number - print an integer number
  * @args: the va_list containing the number to print
  *
  * Return: the number of characters printed
  */
-int _print_number(va_list args)
+int print_number(va_list args)
 {
 	int num = va_arg(args, int);
 	int len = 0;
@@ -75,6 +75,43 @@ int _print_number(va_list args)
 }
 
 /**
+ * print_binary - print an unsigned int as binary
+ * @args: the va_list containing the number to print
+ *
+ * Return: the number of characters printed
+ */
+int print_binary(va_list args)
+{
+	unsigned int num = va_arg(args, unsigned int);
+	int len = 0;
+	int i;
+	char buffer[32];
+
+	if (num == 0)
+	{
+		_putchar('0');
+		return (1);
+	}
+
+	for (i = 0; i < 32; i++)
+		buffer[i] = (num >> (31 - i) & 1) + '0';
+
+	for (i = 0; i < 32; i++)
+	{
+		if (buffer[i] == '1')
+			break;
+	}
+
+	for (; i < 32; i++)
+	{
+		_putchar(buffer[i]);
+		len++;
+	}
+
+	return (len);
+}
+
+/**
  * _printf - produces output according to a format
  * @format: the format string
  *
@@ -83,11 +120,9 @@ int _print_number(va_list args)
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int len = 0;
-	int i = 0;
+	int len = 0, i = 0;
 
 	va_start(args, format);
-
 	while (format[i])
 	{
 		if (format[i] == '%')
@@ -105,7 +140,9 @@ int _printf(const char *format, ...)
 			else if (format[i] == 's')
 				len += print_string(args);
 			else if (format[i] == 'd' || format[i] == 'i')
-				len += _print_number(args);
+				len += print_number(args);
+			else if (format[i] == 'b')
+				len += print_binary(args);
 			else
 			{
 				_putchar('%');
