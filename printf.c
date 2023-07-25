@@ -1,5 +1,5 @@
-#include <stdarg.h>
 #include "main.h"
+#include <stdarg.h>
 #include <stddef.h>
 
 /**
@@ -17,8 +17,7 @@ int print_char(va_list args)
 }
 
 /**
- * print_string - print a string of characters.
- *
+ * print_string - print a string of characters
  * @args: the va_list containing the string to print
  *
  * Return: the number of characters printed
@@ -36,46 +35,47 @@ int print_string(va_list args)
 		_putchar(str[len]);
 		len++;
 	}
+
 	return (len);
 }
 
 /**
- * print_binary - print an unsigned int as binary.
+ * _print_number - print an integer number
+ * @args: the va_list containing the number to print
  *
- * @args: the va_list containing the number to print.
- *
- * Return: the number of characters printed.
+ * Return: the number of characters printed
  */
-int print_binary(va_list args)
+int _print_number(va_list args)
 {
-	unsigned int num = va_arg(args, unsigned int);
+	int num = va_arg(args, int);
 	int len = 0;
-	int i;
-	char buffer[32];
+	int divisor = 1;
+	char buffer[20];
 
-	if (num == 0)
+	if (num < 0)
 	{
-		_putchar('0');
-		return (1);
-	}
-	for (i = 0; i < 32; i++)
-		buffer[i] = (num >> (31 - i) & 1) + '0';
-	for (i = 0; i < 32; i++)
-	{
-		if (buffer[i] == '1')
-			break;
-	}
-	for (; i < 32; i++)
-	{
-		_putchar(buffer[i]);
+		_putchar('-');
 		len++;
+		num *= -1;
 	}
+
+	while (num / divisor > 9)
+		divisor *= 10;
+
+	while (divisor > 0)
+	{
+		buffer[len] = (num / divisor) + '0';
+		_putchar(buffer[len]);
+		len++;
+		num %= divisor;
+		divisor /= 10;
+	}
+
 	return (len);
 }
 
 /**
- * _printf - produces output according to a format.
- *
+ * _printf - produces output according to a format
  * @format: the format string
  *
  * Return: the number of characters printed
@@ -83,9 +83,11 @@ int print_binary(va_list args)
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int len = 0, i = 0;
+	int len = 0;
+	int i = 0;
 
 	va_start(args, format);
+
 	while (format[i])
 	{
 		if (format[i] == '%')
@@ -103,9 +105,7 @@ int _printf(const char *format, ...)
 			else if (format[i] == 's')
 				len += print_string(args);
 			else if (format[i] == 'd' || format[i] == 'i')
-				len += print_number(va_arg(args, int));
-			else if (format[i] == 'b')
-				len += print_binary(args);
+				len += _print_number(args);
 			else
 			{
 				_putchar('%');
